@@ -1,0 +1,21 @@
+// ily 
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+generator client {
+  provider = "prisma-client-js"
+  previewFeatures = ["fullTextSearch"]
+}
+ 
+model User {
+  id  Int @id @default(autoincrement())
+  surname String
+  lastname String
+  mail String @unique
+  password String
+
+  token String @unique @default(cuid())
+}
+
