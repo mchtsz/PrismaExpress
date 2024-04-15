@@ -5,44 +5,68 @@ import cookieParser from "cookie-parser";
 
 const prisma = new PrismaClient();
 const app = express();
+const adminPaths = ["/admin/"];
+const restrictedPaths = ["/welcome", ...adminPaths];
+
+app.use(cookieParser());
+
+app.use(async (req, res, next) => {
+    // Exclude '/register' and '/' routes
+    const path = req.path
+
+    if (!restrictedPaths.includes(path)) return next();
+
+    const token = req.cookies.token;
+
+    if (!token) return res.redirect("/");
+
+    const user = await prisma.user.findFirst({
+        where: {
+            token: token
+        }
+    })
+
+    if (!user) return res.redirect("/")
+
+    if (adminPaths.includes(path) && !user?.isAdmin) {
+        return res.redirect("/welcome")
+    }
+
+    next()
+})
 
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static("public"));
-app.use(cookieParser());
-
-app.use("/welcome", async (req, res, next) => {
-    const token = req.cookies.token;
-
-    if (!token) {
-        res.redirect("/");
-    } else {
-        const user = await prisma.user.findFirst({
-            where: {
-                token: token
-            }
-        })
-
-        if (user) {
-            next();
-        } else {
-            res.redirect("/");
-        }
-    }
-})
 
 async function createUser() {
     const user = await prisma.user.create({
         data: {
-        surname: "test",
+        firstname: "test",
         lastname: "testing",
         mail: "mail@test.com",
         password: "passord01",
         }
     });
 
-    console.log(user.surname + "" + "has been created");
+    console.log(user.firstname + "" + "has been created");
 
     return user;
+}
+
+async function createAdmin() {
+    const admin = await prisma.user.create({
+        data: {
+        firstname: "admin",
+        lastname: "admin",
+        mail: "admin@test.com",
+        password: crypto.createHash("sha256").update("admin").digest("hex"),
+        isAdmin: true,
+        }
+    })
+
+    console.log(`${admin.firstname} has been created`);
+
+    return admin;
 }
 
 app.post("/login", async (req, res) => {
@@ -55,7 +79,7 @@ app.post("/login", async (req, res) => {
         }
     });
 
-    if (userData) {
+    if(userData) {
         res.cookie("token", userData.token);
         res.redirect("/welcome");
     } else {
@@ -64,11 +88,11 @@ app.post("/login", async (req, res) => {
 })
 
 app.post("/register", async (req, res) => {
-    const { surname, lastname, mail, password } = req.body;
+    const { firstname, lastname, mail, password } = req.body;
 
     const user = await prisma.user.create({
         data: {
-            surname: surname,
+            firstname: firstname,
             lastname: lastname,
             mail: mail,
             password: crypto.createHash("sha256").update(password).digest("hex")
@@ -85,7 +109,6 @@ app.get("/welcome", async (req, res) => {
 app.get("/register", async (req, res) => {
     res.sendFile(__dirname + "/public/register.html")
 })
-
 
 app.listen(3000, () => {
 console.log(`Server running on port 3000`);

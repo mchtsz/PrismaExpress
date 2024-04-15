@@ -11,11 +11,12 @@ generator client {
  
 model User {
   id  Int @id @default(autoincrement())
-  surname String
+  firstname String
   lastname String
   mail String @unique
   password String
 
   token String @unique @default(cuid())
-}
 
+  isAdmin Boolean @default(false)
+}
