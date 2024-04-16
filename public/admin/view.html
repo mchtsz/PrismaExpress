@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/global.css" />
+    <title>view users</title>
+    <style>
+        .user {
+            font-size: 1.5rem;
+            padding: 1rem;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+            margin-bottom: 1rem;
+            color: #fff;
+        }
+
+        #users .user:hover {
+            opacity: 0.8;
+            cursor: pointer;
+            background-color: #444;
+        }
+        
+        .header {
+            font-weight: bold;
+            border-bottom: 1px solid #fff;
+        }
+
+        #users {
+            text-align: center;
+            background-color: #333;
+            padding: 1rem;
+            display: grid;
+        }
+    </style>
+    <script defer>
+        fetch('http://localhost:3000/api/users')
+    .then(response => response.json())
+    .then(data => {
+        const usersDiv = document.getElementById('users');
+        const headerDiv = document.createElement('div');
+        headerDiv.className = 'user header';
+        headerDiv.innerHTML = `<div>First Name</div><div>Last Name</div><div>Email</div><div>Admin?</div>`;
+        usersDiv.appendChild(headerDiv);
+        data.forEach(user => {
+            const userDiv = document.createElement('div');
+            userDiv.className = 'user';
+            userDiv.innerHTML = `<div>${user.firstname}</div><div>${user.lastname}</div><div>${user.mail}</div><div>${user.isAdmin}</div>`;
+            usersDiv.appendChild(userDiv);
+        });
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+    </script>
+</head>
+<body>
+    <div id="users"></div>
+</body>
+</html>

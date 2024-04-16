@@ -110,6 +110,19 @@ app.get("/register", async (req, res) => {
     res.sendFile(__dirname + "/public/register.html")
 })
 
+app.get("/admin/edit", async (req, res) => {
+    res.sendFile(__dirname + "/public/admin/edit.html")
+})
+
+app.get("/admin/view", async (req, res) => {
+    res.sendFile(__dirname + "/public/admin/view.html")
+})
+
+app.get("/api/users/", async (req, res) => {
+    const users = await prisma.user.findMany();
+    res.json(users);
+});
+
 app.listen(3000, () => {
 console.log(`Server running on port 3000`);
 });
