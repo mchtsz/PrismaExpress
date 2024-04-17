@@ -2,6 +2,15 @@ import express from "express"
 import { PrismaClient } from "@prisma/client";
 import crypto from "crypto";
 import cookieParser from "cookie-parser";
+import { compileCss } from "./compileCss"
+import path from "path"
+
+const sassOptions = {
+  src: path.join(__dirname, 'styles'),
+  dest: path.join(__dirname, 'public')
+};
+
+compileCss(sassOptions);
 
 const prisma = new PrismaClient();
 const app = express();
