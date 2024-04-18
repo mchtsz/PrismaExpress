@@ -44,4 +44,14 @@ form {
         }
     }
 
+    select {
+        width: 260px;
+        padding: 1rem;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        text-align: center;
+        font-weight: 500;
+        font-size: 20px;
+    }
+
 }

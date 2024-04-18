@@ -95,14 +95,14 @@ app.post("/login", async (req, res) => {
 
   if (userData) {
     switch (userData.isAdmin) {
-        case true:
-            res.cookie("token", userData.token);
-            res.redirect("/admin");
-            break;
-        case false:
-            res.cookie("token", userData.token);
-            res.redirect("/welcome");
-            break;
+      case true:
+        res.cookie("token", userData.token);
+        res.redirect("/admin");
+        break;
+      case false:
+        res.cookie("token", userData.token);
+        res.redirect("/welcome");
+        break;
     }
   } else {
     res.redirect("/");
@@ -125,6 +125,27 @@ app.post("/register", async (req, res) => {
   res.redirect("/");
 });
 
+app.post("/createUser", async (req, res) => {
+  const { firstname, lastname, mail, password, isAdmin } = req.body;
+  const isAdminBoolean = isAdmin === 'true' ? true : false;
+
+  const user = await prisma.user.create({
+    data: {
+      firstname: firstname,
+      lastname: lastname,
+      mail: mail,
+      password: crypto.createHash("sha256").update(password).digest("hex"),
+      isAdmin: isAdminBoolean,
+    },
+  });
+
+  if (user) {
+    res.redirect("/admin");
+  } else {
+    res.json({ error: "An error occurred" });
+  }
+});
+
 // page routes
 const pageRoutes = {
   welcome: (req, res) => {
@@ -141,7 +162,7 @@ const pageRoutes = {
   },
   adminCreate: (req, res) => {
     res.sendFile(__dirname + "/public/admin/create.html");
-  }
+  },
 };
 
 // api routes

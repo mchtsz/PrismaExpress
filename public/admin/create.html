@@ -8,6 +8,17 @@
     <title>Create users</title>
 </head>
 <body data-darkmode>
-    
+    <form action="/createUser" method="POST">
+        <input type="text" name="firstname" placeholder="firstname">
+        <input type="text" name="lastname" placeholder="lastname">
+        <input type="mail" name="mail" placeholder="example@mail.com">
+        <input type="password" name="password" placeholder="password">
+        <select name="isAdmin">
+            <option>-- make admin --</option>
+            <option value=true>true</option>
+            <option value=false>false</option>
+        </select>
+        <input type="submit">
+    </form>
 </body>
 </html>
