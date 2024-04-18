@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "start": "clear && tsx watch app.ts",
+    "start": "cls && tsx watch app.ts",
     "fix": "npm i @types/node && npm i express && npm i @types/express && npm i @prisma/client"
   },
   "dependencies": {

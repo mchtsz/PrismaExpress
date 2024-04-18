@@ -36,8 +36,3 @@ form input {
 form input:hover {
   transform: scale(1.1);
 }
-
-p {
-  font-size: 20px;
-  text-align: center;
-}
