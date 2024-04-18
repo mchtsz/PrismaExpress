@@ -1,3 +1,43 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+
+// css for index
+section {
+  background-color: #333;
+  height: 100vh;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+
+  #index {
+    padding: 2rem;
+    border-radius: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 400px;
+    height: 300px;
+    background-color: #444;
+    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2);
+  }
+
+  a {
+    transition: 0.2s ease-in-out;
+    text-decoration: none;
+    color: #fff;
+    font-size: 24px;
+
+    &:hover {
+      scale: (1.1);
+    }
+  }
+}
+
+
+
+// css for admin/view
 #users {
   text-align: center;
   background-color: #333;

@@ -94,8 +94,16 @@ app.post("/login", async (req, res) => {
   });
 
   if (userData) {
-    res.cookie("token", userData.token);
-    res.redirect("/welcome");
+    switch (userData.isAdmin) {
+        case true:
+            res.cookie("token", userData.token);
+            res.redirect("/admin");
+            break;
+        case false:
+            res.cookie("token", userData.token);
+            res.redirect("/welcome");
+            break;
+    }
   } else {
     res.redirect("/");
   }
@@ -131,6 +139,9 @@ const pageRoutes = {
   adminView: (req, res) => {
     res.sendFile(__dirname + "/public/admin/view.html");
   },
+  adminCreate: (req, res) => {
+    res.sendFile(__dirname + "/public/admin/create.html");
+  }
 };
 
 // api routes
@@ -146,6 +157,7 @@ app.get("/welcome", pageRoutes.welcome);
 app.get("/register", pageRoutes.register);
 app.get("/admin/edit", pageRoutes.adminEdit);
 app.get("/admin/view", pageRoutes.adminView);
+app.get("/admin/create", pageRoutes.adminCreate);
 
 // gets api routes
 app.get("/api/users/", apiRoutes.users);
