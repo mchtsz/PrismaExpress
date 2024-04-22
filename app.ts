@@ -146,6 +146,23 @@ app.post("/createUser", async (req, res) => {
   }
 });
 
+app.post("/deleteUser/:id", async (req, res) => {
+  const id = parseInt(req.params.id);
+
+  try {
+    const deletedUser = await prisma.user.delete({
+      where: {
+        id: id,
+      },
+    });
+
+    res.redirect("/admin/edit");
+  } catch (error) {
+    console.error("Error deleting user:", error);
+    res.status(500).send("Error deleting user");
+  }
+});
+
 // page routes
 const pageRoutes = {
   welcome: (req, res) => {
@@ -163,6 +180,10 @@ const pageRoutes = {
   adminCreate: (req, res) => {
     res.sendFile(__dirname + "/public/admin/create.html");
   },
+  adminEditID: (req, res) => {
+    const id = req.params.id;
+    res.sendFile(__dirname + "/public/admin/id.html");
+  }
 };
 
 // api routes
@@ -179,6 +200,7 @@ app.get("/register", pageRoutes.register);
 app.get("/admin/edit", pageRoutes.adminEdit);
 app.get("/admin/view", pageRoutes.adminView);
 app.get("/admin/create", pageRoutes.adminCreate);
+app.get("/admin/edit/:id", pageRoutes.adminEditID);
 
 // gets api routes
 app.get("/api/users/", apiRoutes.users);

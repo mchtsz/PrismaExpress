@@ -1,0 +1,39 @@
+form {
+    display: flex;
+    gap: 1rem;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+
+    p {
+        color: #fff;
+        font-size: 20px;
+    }
+
+    input {
+        transition: 0.2s ease-in-out;
+        padding: 1rem;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        text-align: center;
+
+        font-weight: 500;
+        font-size: 20px;
+
+        &:hover {
+            transform: scale(1.1);
+        }
+    }
+
+    select {
+        width: 260px;
+        padding: 1rem;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        text-align: center;
+        font-weight: 500;
+        font-size: 20px;
+    }
+
+}
