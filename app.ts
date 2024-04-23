@@ -4,6 +4,8 @@ import crypto from "crypto";
 import cookieParser from "cookie-parser";
 import { compileCss } from "./compileCss";
 import path from "path";
+import { info } from "console";
+import { create } from "domain";
 
 const prisma = new PrismaClient();
 const app = express();
@@ -125,6 +127,17 @@ app.post("/register", async (req, res) => {
   res.redirect("/");
 });
 
+/*  post for consent / gdpr
+app.post("/checkConsent", async (req,res) => {
+  const { consent } = req.body;
+  const consentBoolean = consent === 'true' ? true : false;
+  if (consentBoolean) {
+    res.redirect("/");
+  } else {
+    res.redirect("/info");
+  }
+})
+ */
 app.post("/createUser", async (req, res) => {
   const { firstname, lastname, mail, password, isAdmin } = req.body;
   const isAdminBoolean = isAdmin === 'true' ? true : false;
@@ -165,6 +178,9 @@ app.post("/deleteUser/:id", async (req, res) => {
 
 // page routes
 const pageRoutes = {
+  info: (req, res) => {
+    res.sendFile(__dirname + "/public/info.html");
+  },
   welcome: (req, res) => {
     res.sendFile(__dirname + "/public/welcome.html");
   },
@@ -195,6 +211,7 @@ const apiRoutes = {
 };
 
 // gets page routes
+app.get("/info", pageRoutes.info);
 app.get("/welcome", pageRoutes.welcome);
 app.get("/register", pageRoutes.register);
 app.get("/admin/edit", pageRoutes.adminEdit);
