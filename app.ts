@@ -197,7 +197,6 @@ const pageRoutes = {
     res.sendFile(__dirname + "/public/admin/create.html");
   },
   adminEditID: (req, res) => {
-    const id = req.params.id;
     res.sendFile(__dirname + "/public/admin/id.html");
   }
 };
@@ -207,6 +206,16 @@ const apiRoutes = {
   users: async (req, res) => {
     const users = await prisma.user.findMany();
     res.json(users);
+  },
+  userByID: async (req, res) => {
+    const id = req.params.id;
+    const user = await prisma.user.findUnique({
+      where: {
+        id: parseInt(id),
+      },
+    });
+
+    res.json(user);
   },
 };
 
@@ -221,6 +230,7 @@ app.get("/admin/edit/:id", pageRoutes.adminEditID);
 
 // gets api routes
 app.get("/api/users/", apiRoutes.users);
+app.get("/api/user/:id", apiRoutes.userByID);
 
 // start the server
 app.listen(3000, () => {
